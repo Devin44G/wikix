@@ -35,7 +35,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        return view('projects.create');
     }
 
     /**
@@ -46,7 +46,14 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      // CREATE POST
+        $project = new Project;
+        $project->project_name = $request->input('project_name');
+        $project->project_description = $request->input('project_description');
+        $project->user_id = auth()->user()->id;
+        // $post->save();
+        error_log($project);
+        return redirect('/home')->with('success', 'Project Created Successfully');
     }
 
     /**

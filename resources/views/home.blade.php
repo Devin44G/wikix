@@ -16,6 +16,8 @@
 
                     {{ __('You are logged in!') }}
                     <p><a href="{{ route('projects.index') }}">View Projects</a></p>
+                    <p>Most recent:</p>
+                    <p>{{$project}}</p>
                 </div>
             </div>
         </div>

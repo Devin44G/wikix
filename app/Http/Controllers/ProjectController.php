@@ -24,8 +24,8 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::orderBy('created_at', 'desc');
-        return view('projects.index')->with('projects', $projects);
+        $projects = Project::orderBy('created_at', 'desc')->get();
+        return view('projects.index', ['projects' => $projects]);
     }
 
     /**
@@ -46,13 +46,13 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-      // CREATE POST
+        // CREATE PROJECT
         $project = new Project;
         $project->project_name = $request->input('project_name');
         $project->project_description = $request->input('project_description');
         $project->user_id = auth()->user()->id;
-        // $post->save();
-        error_log($project);
+        $project->save();
+
         return redirect('/home')->with('success', 'Project Created Successfully');
     }
 
@@ -64,7 +64,8 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        //
+        $project = Project::find($id);
+        return view('projects.show', ['project' => $project]);
     }
 
     /**
@@ -75,7 +76,14 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
-        //
+        $project = Project::find($id);
+
+        // CHECK FOR CORRECT USER
+        if(auth()->user()->id !== $project->user_id) {
+          return redirect('/projects')->with('error', 'Unauthorized page');
+        }
+
+        return view('projects.edit', ['project' => $project]);
     }
 
     /**
@@ -87,7 +95,20 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // CREATE PROJECT
+        $project = Project::find($id);
+
+        // CHECK FOR CORRECT USER
+        if(auth()->user()->id !== $project->user_id) {
+          return redirect('/projects')->with('error', 'Unauthorized page');
+        }
+
+        $project->project_name = $request->input('project_name');
+        $project->project_description = $request->input('project_description');
+        $project->user_id = auth()->user()->id;
+        $project->save();
+
+        return redirect('/projects')->with('success', 'Project Updated Successfully');
     }
 
     /**
@@ -98,6 +119,15 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        //
-    }
+        // CREATE PROJECT
+        $project = Project::find($id);
+
+        // CHECK FOR CORRECT USER
+        if(auth()->user()->id !== $project->user_id) {
+          return redirect('/projects')->with('error', 'Unauthorized page');
+        }
+
+      $project->delete();
+      return redirect('/projects')->with('success', 'Project Deleted');
+  }
 }

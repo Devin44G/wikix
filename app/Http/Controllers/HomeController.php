@@ -24,6 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+      // Displaying most recently worked on project in user dashboard home
         $project = DB::table('projects')->orderBy('updated_at', 'desc')->take(1)->get();
         return view('home', ['project' => $project]);
     }

@@ -13,6 +13,8 @@ class CreateProjectsTable extends Migration
      */
     public function up()
     {
+      // note: Initial schema set up
+      // Will later add columns for array of story docs & definition docs
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->timestamps();

@@ -24,6 +24,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
+      // Ordering projects by most recently created
         $projects = Project::orderBy('created_at', 'desc')->get();
         return view('projects.index', ['projects' => $projects]);
     }
@@ -95,7 +96,6 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // CREATE PROJECT
         $project = Project::find($id);
 
         // CHECK FOR CORRECT USER
@@ -103,6 +103,7 @@ class ProjectController extends Controller
           return redirect('/projects')->with('error', 'Unauthorized page');
         }
 
+        // CREATE PROJECT
         $project->project_name = $request->input('project_name');
         $project->project_description = $request->input('project_description');
         $project->user_id = auth()->user()->id;
@@ -119,7 +120,6 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        // CREATE PROJECT
         $project = Project::find($id);
 
         // CHECK FOR CORRECT USER
@@ -127,7 +127,7 @@ class ProjectController extends Controller
           return redirect('/projects')->with('error', 'Unauthorized page');
         }
 
-      $project->delete();
-      return redirect('/projects')->with('success', 'Project Deleted');
+        $project->delete();
+        return redirect('/projects')->with('success', 'Project Deleted');
   }
 }

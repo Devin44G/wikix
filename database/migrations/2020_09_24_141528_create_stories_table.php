@@ -21,7 +21,7 @@ class CreateStoriesTable extends Migration
             $table->mediumText('story_doc_content')
                   ->nullable();
             $table->foreignId('project_id')
-                  ->constrained('projects')
+                  ->constrained('projects') //<< Constrained is new to Laravel 8 (no need to reference table and column)
                   ->onDelete('cascade');
         });
     }
